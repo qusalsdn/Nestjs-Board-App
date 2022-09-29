@@ -26,8 +26,8 @@ export class BoardsService {
   //   return board;
   // }
 
-  createBoard(createBoardDto: CreateBoardDto): any {
-    this.boardRepository.createBoard(createBoardDto);
+  createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
+    return this.boardRepository.createBoard(createBoardDto);
   }
 
   async getBoardById(id: string): Promise<Board> {
@@ -38,6 +38,14 @@ export class BoardsService {
     }
 
     return found;
+  }
+
+  async deleteBoard(id: number): Promise<void> {
+    const result = await this.boardRepository.delete(id);
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`Can't find Board with id ${id}`);
+    }
   }
 
   // getBoardById(id: string): Board {
